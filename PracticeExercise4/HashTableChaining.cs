@@ -2,21 +2,21 @@
 
 namespace PracticeExercise4
 {
-	public class HashTableChaining<K,V> : IHashTable<K,V>
+    public class HashTableChaining<K, V> : IHashTable<K, V>
     {
 
-        LinkedList< Bucket<K, V> >[] bucketListsArray;
-        private int initialCapacity = 16; 
+        LinkedList<Bucket<K, V>>[] bucketListsArray;
+        private int initialCapacity = 16;
 
-		public HashTableChaining()
-		{
+        public HashTableChaining()
+        {
             bucketListsArray = new LinkedList<Bucket<K, V>>[initialCapacity];
 
-            for(int i=0; i < bucketListsArray.Length; i++)
+            for (int i = 0; i < bucketListsArray.Length; i++)
             {
                 bucketListsArray[i] = new LinkedList<Bucket<K, V>>();
             }
-		}
+        }
 
         private int count;
         public int Count => count;
@@ -26,9 +26,9 @@ namespace PracticeExercise4
             get
             {
                 int filled = 0;
-                foreach(var list in bucketListsArray)
+                foreach (var list in bucketListsArray)
                 {
-                    if( list.Count > 0 )
+                    if (list.Count > 0)
                     {
                         filled++;
                     }
@@ -52,11 +52,11 @@ namespace PracticeExercise4
             var list = bucketListsArray[index];
 
             // find the bucket in the bucket list at the index
-            foreach( var bucket in list)
+            foreach (var bucket in list)
             {
                 // if the bucket list contains the key,
                 // then update the value
-                if ( bucket.Key.Equals(key) )
+                if (bucket.Key.Equals(key))
                 {
                     bucket.Value = value;
                     return true;
@@ -67,7 +67,7 @@ namespace PracticeExercise4
             // then append a new bucket to that list
 
             var newBucket = new Bucket<K, V>(key, value);
-            list.Append(newBucket);
+            list.AddFirst(newBucket);
             count++;
 
             return false;
@@ -85,9 +85,9 @@ namespace PracticeExercise4
             var list = bucketListsArray[index];
 
             // search the list for the key
-            foreach(var bucket in list)
+            foreach (var bucket in list)
             {
-                if( bucket.Key.Equals( key))
+                if (bucket.Key.Equals(key))
                 {
                     return true;
                 }
@@ -113,9 +113,9 @@ namespace PracticeExercise4
         {
             List<K> keys = new List<K>();
 
-            foreach(LinkedList< Bucket<K,V>> list in bucketListsArray)
+            foreach (LinkedList<Bucket<K, V>> list in bucketListsArray)
             {
-                foreach( var bucket in list)
+                foreach (var bucket in list)
                 {
                     keys.Add(bucket.Key);
                 }
@@ -142,9 +142,9 @@ namespace PracticeExercise4
             var list = bucketListsArray[index];
 
             // find the key in the list
-            foreach( var bucket in list)
+            foreach (var bucket in list)
             {
-                if( bucket.Key.Equals(key))
+                if (bucket.Key.Equals(key))
                 {
                     list.Remove(bucket);
                     count--;
@@ -165,4 +165,3 @@ namespace PracticeExercise4
         }
     }
 }
-
