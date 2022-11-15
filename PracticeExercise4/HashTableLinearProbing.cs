@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PracticeExercise4
 {
@@ -74,20 +75,62 @@ namespace PracticeExercise4
         // O(n) - worst case
         public bool ContainsKey(K key)
         {
-            throw new NotImplementedException();
+
+            // find the hash
+            int hash = Hash(key);
+
+            // find the starting index
+            int startingIndex = hash % buckets.Length;
+            int bucketIndex = startingIndex;
+
+            while (buckets[bucketIndex].State == BucketState.Full)
+            {
+                // if the key exists, return true.
+                if (buckets[bucketIndex].Key.Equals(key))
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
         }
 
         // O(n) - average case
         // O(n) - worst case
         public bool ContainsValue(V value)
         {
-            throw new NotImplementedException();
+            foreach(var bucket in buckets)
+            {
+                if (bucket.Value.Equals(value))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         // O(1) - average case
         // O(n) - worst case
         public V Get(K key)
         {
+
+            // find the hash
+            int hash = Hash(key);
+
+            // find the starting index
+            int startingIndex = hash % buckets.Length;
+            int bucketIndex = startingIndex;
+
+            while (buckets[bucketIndex].State == BucketState.Full)
+            {
+                // if the key exists, return value.
+                if (buckets[bucketIndex].Key.Equals(key))
+                {
+                    return buckets[bucketIndex].Value;
+                }
+
+                return default(V);
+            }
             throw new NotImplementedException();
         }
 
@@ -102,17 +145,41 @@ namespace PracticeExercise4
         // O(n) - worst case
         public List<V> GetValues()
         {
-            throw new NotImplementedException();
+            List<V> values = new List<V>();
+
+            foreach (var bucket in buckets)
+            {
+                    values.Add(bucket.Value);
+            }
+
+            return values;
         }
 
         // O(1) - average case
         // O(n) - worst case
         public bool Remove(K key)
         {
-            throw new NotImplementedException();
-        }
+            // find the hash
+            int hash = Hash(key);
 
-        private void Resize()
+            // find the starting index
+            int startingIndex = hash % buckets.Length;
+            int bucketIndex = startingIndex;
+
+            while (buckets[bucketIndex].State == BucketState.Full)
+            {
+                // if the key exists, then remove it.
+                if (buckets[bucketIndex].Key.Equals(key))
+                {
+                    buckets[bucketIndex].Clear();
+                    count--;
+                    return true;
+                }
+            }
+            return false;
+            }
+
+            private void Resize()
         {
             var newBuckets = new Bucket<K, V>[2 * buckets.Length];
             var oldBuckets = buckets;
